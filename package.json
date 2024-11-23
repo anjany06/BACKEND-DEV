@@ -4,8 +4,8 @@
   "description": "I am learning backend dev",
   "main": "script.js",
   "scripts": {
-    "start": "chl ab gand dede",
-    "test": "chl apni ma chuda"
+    "start": "starting",
+    "test": "testing"
   },
   "author": "Anjany",
   "license": "ISC",
