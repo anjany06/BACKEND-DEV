@@ -1,0 +1,17 @@
+{
+  "name": "backend-dev",
+  "version": "1.0.0",
+  "description": "I am learning backend dev",
+  "main": "script.js",
+  "scripts": {
+    "start": "chl ab gand dede",
+    "test": "chl apni ma chuda"
+  },
+  "author": "Anjany",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.1",
+    "one-liner-joke": "^1.2.2"
+  }
+}
