@@ -5,7 +5,6 @@ const path = require('path');
 // fs module?
 //fs module hamare node js core me avaible hai toh ise hm ek trah se file handling kr skte hai
 const fs = require ('fs');// neeche hai iska use
-const { log } = require('console');
 
 
 // yeh neeche two lines hm apne form ko use kr payenge but post form me abhi bhi dikkat hogi
@@ -23,6 +22,12 @@ app.get("/", function(req, res){
     
     // so jb files read ho jaye uske baad hi hamra index render ho isiliye hmne ish neehe wali statement ko is callbackk func k uner likha hai
       res.render("index",{files: files});// so ease hm files ka data index me bhej skte hai files object bna k
+  })
+})
+//utf 8 isko english lang me data show krwana k liye wrna data buffer me ayega
+app.get("/file/:filename", function(req, res){
+  fs.readFile(`./files/${req.params.filename}`,"utf-8" ,function(err, filedata){
+    res.render('show',{filename: req.params.filename, filedata : filedata })
   })
 })
 app.post("/create", function(req, res){

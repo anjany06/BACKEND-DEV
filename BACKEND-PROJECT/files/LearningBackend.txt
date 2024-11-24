@@ -1,0 +1,1 @@
+Today I started learning about backend web development so started from node js. so it is a runtime environment which enable us to write javaScript on server side.
