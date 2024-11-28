@@ -19,6 +19,27 @@ app.get("/profile", isLoggedIn, async (req, res)=>{
   // toh hm post field ko populate kr rhe hai
   res.render("profile",{user});
 })
+app.get("/like/:id", isLoggedIn, async (req, res)=>{
+  let post = await postModel.findOne({_id: req.params.id}).populate("user");
+  //like and unlike k liye functionality
+  if (post.likes.indexOf(req.user.userId) === -1){
+    post.likes.push(req.user.userId)
+  }
+  else{
+    post.likes.splice(post.likes.indexOf(req.user.userId),1);
+  }
+  await post.save()
+  res.redirect("/profile");
+})
+app.get("/edit/:id", isLoggedIn, async (req, res)=>{
+  let post = await postModel.findOne({_id: req.params.id})
+  res.render("edit",{post});
+  
+})
+app.post("/update/:id", isLoggedIn, async (req, res)=>{
+  let post = await postModel.findOneAndUpdate({_id: req.params.id}, {content : req.body.content})
+  res.redirect("/profile");
+})
 app.post("/post", isLoggedIn, async (req, res)=>{
   let user = await userModel.findOne({email : req.user.email})
   let {content} = req.body;
@@ -41,7 +62,7 @@ app.post("/register", async(req, res)=>{
 
   bcrypt.genSalt(10, (err ,salt)=>{
     bcrypt.hash(password, salt, async(err, hash)=>{
-      let createdUser = await userModel.create({
+      let user = await userModel.create({
         name,
         username,
         password: hash,
