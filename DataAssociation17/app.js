@@ -14,9 +14,22 @@ app.use(cookieParser());
 app.get("/",(req, res)=>{
   res.render("index");
 })
-app.get("/profile", isLoggedIn, (req, res)=>{
-  res.send("hello");
-  console.log(req.user);
+app.get("/profile", isLoggedIn, async (req, res)=>{
+  let user = await userModel.findOne({email : req.user.email}).populate("post")
+  // toh hm post field ko populate kr rhe hai
+  res.render("profile",{user});
+})
+app.post("/post", isLoggedIn, async (req, res)=>{
+  let user = await userModel.findOne({email : req.user.email})
+  let {content} = req.body;
+  let post = await postModel.create({
+    user: user._id,
+    content,
+  });
+  // so hme user ko batayengee ki usne post create krdi hai isiliye user ki posts me post id push kr denge
+  user.post.push(post._id);
+  await user.save();
+  res.redirect("/profile");
 })
 app.get("/login", (req, res)=>{
   res.render("login");
@@ -51,7 +64,7 @@ app.post("/login", async(req, res)=>{
     if(result){ 
       let token = jwt.sign({email: email, userId : user._id}, "secret")
       res.cookie("token", token);
-      res.status(200).send("You can login")
+      res.status(200).redirect("/profile")
      }
    else res.redirect("/login");
 
