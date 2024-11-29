@@ -5,14 +5,30 @@ const postModel = require("./models/post");
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const multerconfig = require("./config/multerconfig");
 
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+
 app.get("/",(req, res)=>{
   res.render("index");
+})
+app.get("/test", (req, res)=>{
+  res.render("test");
+})
+// ,upload.single("image")
+app.post("/upload",(req, res)=>{
+  console.log("Body:", JSON.stringify(req.body, null, 2)); // Log the body
+    console.log("File:", req.file); // Log the file information
+
+  if (req.file) {
+    res.send("File uploaded successfully!");
+} else {
+    res.send("No file uploaded.");
+}
 })
 app.get("/profile", isLoggedIn, async (req, res)=>{
   let user = await userModel.findOne({email : req.user.email}).populate("post")
