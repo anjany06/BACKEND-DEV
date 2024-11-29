@@ -16,11 +16,23 @@
           >Logout</a
         >
       </div>
-      <div class="flex items-start gap-3">
-        <div class="w-12 h-12 bg-red-500 rounded-md"></div>
-        <h3 class="text-3xl mb-2">
-          <span class="font-light">Hello</span>, <%= user.name %>
-        </h3>
+      <div class="flex items-end gap-3">
+        <div class="w-20 h-20 rounded-md overflow-hidden">
+          <img
+            class="w-full h-full object-cover"
+            src="/images/uploads/<%= user.profilepic %>"
+          />
+        </div>
+        <div class="flex flex-col">
+          <a
+            class="bg-yellow-500 py-2 px-3 rounded-md text-sm w-fit"
+            href="/profile/upload"
+            >Change Profile Pic</a
+          >
+          <h3 class="text-3xl my-1">
+            <span class="font-light">Hello</span>, <%= user.name %>
+          </h3>
+        </div>
       </div>
       <h5 class="mb-3">You can Create a new post</h5>
       <form action="/post" method="post">

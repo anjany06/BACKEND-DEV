@@ -5,31 +5,41 @@ const postModel = require("./models/post");
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
-const multerconfig = require("./config/multerconfig");
+const upload = require("./config/multerconfig");
+const path = require("path");
 
 app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname,"public")));
 app.use(cookieParser());
 
 
 app.get("/",(req, res)=>{
   res.render("index");
 })
-app.get("/test", (req, res)=>{
-  res.render("test");
+app.get("/profile/upload", (req, res)=>{
+  res.render("profileupload");
+})
+
+app.post("/upload", isLoggedIn,upload.single("image"), async(req, res)=>{
+  let user = await userModel.findOne({email: req.user.email});
+  user.profilepic = req.file.filename;
+  //kyuki hmne khud hath se change kiya hai isiliye user.save
+  await user.save();
+  res.redirect("/profile");
 })
 // ,upload.single("image")
-app.post("/upload",(req, res)=>{
-  console.log("Body:", JSON.stringify(req.body, null, 2)); // Log the body
-    console.log("File:", req.file); // Log the file information
+// app.post("/upload",(req, res)=>{
+//   console.log("Body:", JSON.stringify(req.body, null, 2)); // Log the body
+//     console.log("File:", req.file); // Log the file information
 
-  if (req.file) {
-    res.send("File uploaded successfully!");
-} else {
-    res.send("No file uploaded.");
-}
-})
+//   if (req.file) {
+//     res.send("File uploaded successfully!");
+// } else {
+//     res.send("No file uploaded.");
+// }
+// })
 app.get("/profile", isLoggedIn, async (req, res)=>{
   let user = await userModel.findOne({email : req.user.email}).populate("post")
   // toh hm post field ko populate kr rhe hai
